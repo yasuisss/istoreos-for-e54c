@@ -14,6 +14,7 @@ function git_sparse_clone() {
 # 更新 golang 1.24 版本
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 25.x feeds/packages/lang/golang
+git clone --depth=1 https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff
 
 # 必要的库
 git clone --depth=1 -b main https://github.com/linkease/istore-packages package/istore-packages
@@ -28,10 +29,10 @@ rm -rf feeds/packages/net/{xray-core,chinadns-ng,v2ray-geodata,sing-box}
 rm -rf package/diy/luci-app-ota
 
 # 科学上网插件
-git clone https://github.com/xiaorouji/openwrt-passwall-packages package/passwall-packages
-git clone https://github.com/xiaorouji/openwrt-passwall package/passwall
-git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-nikki package/nikki
+git clone -b main https://github.com/xiaorouji/openwrt-passwall package/psw
+git clone https://github.com/xiaorouji/openwrt-passwall-packages package/pswcore
 git clone --depth=1 https://github.com/fw876/helloworld.git package/helloworld
+git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-nikki package/nikki
 
 #OTA
 git_sparse_clone main https://github.com/s71557/istoreos-ota luci-app-ota
@@ -46,13 +47,10 @@ sed -i 's/192.168.1.1/192.168.100.1/g' package/base-files/files/bin/config_gener
 
 # 加入作者信息
 sed -i "s/DISTRIB_DESCRIPTION='*.*'/DISTRIB_DESCRIPTION='StoneOS-$(date +%Y%m%d)'/g"  package/base-files/files/etc/openwrt_release
-sed -i "s/DISTRIB_REVISION='*.*'/DISTRIB_REVISION=' By Stone'/g" package/base-files/files/etc/openwrt_release
+sed -i "s/DISTRIB_REVISION='*.*'/DISTRIB_REVISION=' By yasui'/g" package/base-files/files/etc/openwrt_release
 
 # TTYD
 sed -i 's/services/system/g' feeds/luci/applications/luci-app-ttyd/root/usr/share/luci/menu.d/luci-app-ttyd.json
-
-#添加opkg源
-cp -f $GITHUB_WORKSPACE/distfeeds.conf files/etc/opkg/distfeeds.conf
 
 # 更换默认背景
 cp -f $GITHUB_WORKSPACE/images/bg1.jpg feeds/third/luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg
